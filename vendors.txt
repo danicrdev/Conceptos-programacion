@@ -1,0 +1,5 @@
+TI;72360679;Juan;Diaz
+CE;11777740;Sofia;Hernandez
+TI;50080429;Carlos;Gomez
+CC;43836254;Pedro;Martinez
+CE;62276453;Juan;Rodriguez
