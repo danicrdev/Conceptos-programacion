@@ -1,0 +1,12 @@
+CONCLUSIÓN DEL PROYECTO: GENERACIÓN Y CLASIFICACIÓN DE DATOS
+
+1. Lo aprendido durante el desarrollo del proyecto:
+Durante el desarrollo del proyecto se reforzaron conocimientos fundamentales de programación orientada a objetos en Java, manejo de archivos, estructuras de datos (listas, mapas) y uso de métodos estáticos. 
+  También se comprendió la importancia de la modularidad, la documentación del código y la validación de información en sistemas reales. Además, se aprendió a conectar la generación de datos con su procesamiento y análisis, garantizando coherencia entre diferentes partes del programa.
+
+2. Posibles aplicaciones en la vida profesional:
+Las destrezas adquiridas tienen aplicaciones directas en entornos donde se gestionan grandes volúmenes de información, como ventas, inventarios o reportes empresariales. Este tipo de sistemas pueden ser la base para soluciones más avanzadas, como herramientas de análisis de datos, sistemas de facturación o plataformas de inteligencia de negocio. Además, la práctica de estructurar proyectos en repositorios y documentarlos adecuadamente es esencial en el ámbito profesional del desarrollo de software.
+
+3. Dificultades presentadas durante el desarrollo del proyecto:
+Entre las principales dificultades se encontraron la sincronización entre archivos generados y procesados, el manejo correcto de formatos CSV, y la validación de información incoherente (como IDs inexistentes o cantidades negativas). 
+  Otro reto fue lograr que el código fuera completamente autónomo, sin requerir interacción del usuario, lo que exigió una mayor planificación de los métodos. A pesar de estos desafíos, se alcanzó una solución funcional, coherente y bien documentada.
