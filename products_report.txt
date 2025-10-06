@@ -1,0 +1,8 @@
+Tablet;28;51164
+Laptop;26;12937
+Headphones;24;7914
+Laptop;23;14632
+Headphones;22;45010
+Phone;21;10525
+Headphones;9;5424
+Mouse;3;8000
