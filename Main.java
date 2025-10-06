@@ -3,55 +3,51 @@ import java.util.*;
 
 public class Main {
 
-    // Maps for products and vendors
     private static Map<String, Integer> productPrices = new HashMap<>();
+    private static Map<String, String> productNames = new HashMap<>();
     private static Map<String, String> vendorNames = new HashMap<>();
     private static Map<String, Long> vendorTotals = new HashMap<>();
+    private static Map<String, Integer> productQuantities = new HashMap<>();
 
     public static void main(String[] args) {
         try {
-            // Load products and vendors
             loadProducts("products.txt");
             loadVendors("vendors.txt");
 
-            // Process each vendor's sales file
+            // Process sales for each vendor
             for (String vendorId : vendorNames.keySet()) {
-                String filename = "sales_" + vendorId + ".txt";
-                File salesFile = new File(filename);
+                File salesFile = new File("sales_" + vendorId + ".txt");
                 if (salesFile.exists()) {
                     processSalesFile(salesFile, vendorId);
                 }
             }
 
-            // Generate preliminary report
             generateSalesReport("sales_report.txt");
+            generateProductsReport("products_report.txt");
 
-            System.out.println("✅ Preliminary report generated successfully.");
+            System.out.println("✅ Reports generated successfully.");
         } catch (Exception e) {
-            System.err.println("❌ Error: " + e.getMessage());
+            System.err.println("❌ Error processing files: " + e.getMessage());
         }
     }
 
-    /**
-     * Loads product information into a map (ProductID -> Price).
-     */
     private static void loadProducts(String filename) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
                 if (parts.length == 3) {
-                    String productId = parts[0];
+                    String id = parts[0];
+                    String name = parts[1];
                     int price = Integer.parseInt(parts[2]);
-                    productPrices.put(productId, price);
+                    productPrices.put(id, price);
+                    productNames.put(id, name);
+                    productQuantities.put(id, 0);
                 }
             }
         }
     }
 
-    /**
-     * Loads vendor information into a map (VendorID -> FullName).
-     */
     private static void loadVendors(String filename) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -68,12 +64,9 @@ public class Main {
         }
     }
 
-    /**
-     * Processes a sales file and updates the vendor's total sales.
-     */
     private static void processSalesFile(File salesFile, String vendorId) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(salesFile))) {
-            String header = reader.readLine(); // Skip header line
+            reader.readLine(); // skip header
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
@@ -81,22 +74,38 @@ public class Main {
                     String productId = parts[0];
                     int quantity = Integer.parseInt(parts[1]);
                     int price = productPrices.getOrDefault(productId, 0);
+
                     long subtotal = (long) price * quantity;
                     vendorTotals.put(vendorId, vendorTotals.get(vendorId) + subtotal);
+                    productQuantities.put(productId, productQuantities.getOrDefault(productId, 0) + quantity);
                 }
             }
         }
     }
 
-    /**
-     * Generates a preliminary sales report file.
-     */
     private static void generateSalesReport(String filename) throws IOException {
+        List<Map.Entry<String, Long>> sortedVendors = new ArrayList<>(vendorTotals.entrySet());
+        sortedVendors.sort((a, b) -> Long.compare(b.getValue(), a.getValue())); // descending
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (String vendorId : vendorNames.keySet()) {
-                String fullName = vendorNames.get(vendorId);
-                long total = vendorTotals.get(vendorId);
-                writer.write(fullName + ";" + total);
+            for (Map.Entry<String, Long> entry : sortedVendors) {
+                String name = vendorNames.get(entry.getKey());
+                writer.write(name + ";" + entry.getValue());
+                writer.newLine();
+            }
+        }
+    }
+
+    private static void generateProductsReport(String filename) throws IOException {
+        List<Map.Entry<String, Integer>> sortedProducts = new ArrayList<>(productQuantities.entrySet());
+        sortedProducts.sort((a, b) -> Integer.compare(b.getValue(), a.getValue())); // descending
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (Map.Entry<String, Integer> entry : sortedProducts) {
+                String id = entry.getKey();
+                String name = productNames.get(id);
+                int price = productPrices.get(id);
+                writer.write(name + ";" + entry.getValue() + ";" + price);
                 writer.newLine();
             }
         }
